@@ -23,3 +23,28 @@ functions:
     - http:
         method: get
         path: hello
+  add-exercise:
+    handler: exercise/add
+    events:
+    - http:
+        method: post
+        path: exercise
+        cors: true
+  resources:
+    Resources:
+      TodosDynamoDbTable:
+        Type: 'AWS::DynamoDB::Table'
+        DeletionPolicy: Retain
+        Properties:
+          AttributeDefinitions:
+            -
+              AttributeName: id
+              AttributeType: S
+          KeySchema:
+            -
+              AttributeName: id
+              KeyType: HASH
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
+          TableName: routine
