@@ -1,0 +1,11 @@
+{
+  "name": "xcutes-services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "test": "npm run jest"
+  },
+  "author": "",
+  "license": "MIT"
+}
