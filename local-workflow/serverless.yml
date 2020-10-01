@@ -8,6 +8,8 @@ plugins:
   - serverless-offline
 
 custom:
+  stage: ${opt:stage, self:provider.stage}
+  tableName: ${self:custom.stage}-notes
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
@@ -27,18 +29,19 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024
   environment:
-    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    tableName: ${self:custom.tableName}
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}'
-
+      Resource:
+        - 'Fn::GetAtt': [NotesTable, Arn]
 functions:
   hello:
     handler: handler.hello
@@ -50,21 +53,10 @@ functions:
     handler: todos/create.create
     events:
       - http:
-          path: todos
+          path: notes
           method: post
           integration: lambda
           cors: true
 resources:
-  Resources:
-    TodosDynamoDbTable:
-      Type: 'AWS::DynamoDB::Table'
-      DeletionPolicy: Retain
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+  - ${file(resources/api-gateway-errors.yml)}
+  - ${file(resources/dynamodb-table.yml)}

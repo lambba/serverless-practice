@@ -17,6 +17,8 @@ module.exports.create = (_event, _context, callback) => {
     data: { message: mockMessage },
   });
 
+  console.log('response', response);
+
   callback(null, response);
 
   // const timestamp = new Date().getTime();
