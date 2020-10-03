@@ -3,13 +3,46 @@ service: local-workflow
 frameworkVersion: '2'
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
 
+provider:
+  name: aws
+  runtime: nodejs12.x
+  # stage: ${opt:stage, 'production'}
+  stage: ${env:STAGE}
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment: #Global variables
+    ${file(configs/${self:provider.stage}.yml)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'Fn::GetAtt': [NotesTable, Arn]
+
 custom:
-  stage: ${opt:stage, self:provider.stage}
-  tableName: ${self:custom.stage}-notes
+  # stage: ${opt:stage, self:provider.stage}
+
+  # tableName: ${self:custom.stage}-notes
+  dotenv:
+    basePath: ./configs/
+    logging: false
+    # path: path/to/my/.env (default ./.env)
+    # include:
+      # - AUTH0_CLIENT_ID
+      # - AUTH0_CLIENT_SECRET
+    # exclude:
+      # - NODE_ENV
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
@@ -23,25 +56,6 @@ custom:
     migration:
       dir: offline/migrations
 
-provider:
-  name: aws
-  runtime: nodejs12.x
-  apiGateway:
-    minimumCompressionSize: 1024
-  environment:
-    tableName: ${self:custom.tableName}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        - 'Fn::GetAtt': [NotesTable, Arn]
 functions:
   hello:
     handler: handler.hello
