@@ -12,11 +12,12 @@ provider:
   name: aws
   runtime: nodejs12.x
   # stage: ${opt:stage, 'production'}
-  stage: ${env:STAGE}
+  stage: development # ${env:STAGE}
   apiGateway:
     minimumCompressionSize: 1024
   environment: #Global variables
-    ${file(configs/${self:provider.stage}.yml)}
+    # ${file(configs/${self:provider.stage}.yml)} TODO: TBC
+  tableName: notes # TODO: move to env file
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -32,12 +33,11 @@ provider:
 
 custom:
   # stage: ${opt:stage, self:provider.stage}
-
-  # tableName: ${self:custom.stage}-notes
+  tableName: ${self:provider.stage}-notes
   dotenv:
-    basePath: ./configs/
     logging: false
-    # path: path/to/my/.env (default ./.env)
+    path: ./configs/.env
+    # basePath: ./
     # include:
       # - AUTH0_CLIENT_ID
       # - AUTH0_CLIENT_SECRET
