@@ -26,7 +26,7 @@ export const create = async function create(_event) {
     Item: {
       id: uuidv4(),
       // text: data.text,
-      createdAt: new Date().getTime(),
+      // createdAt: new Date().getTime(),
       // updatedAt: new Date().getTime(),
     },
   };
