@@ -2,10 +2,10 @@ service: local-workflow
 frameworkVersion: '2'
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
-  - serverless-dotenv-plugin
 
 provider:
   name: aws
@@ -52,11 +52,16 @@ custom:
     start:
       port: 8000
       inMemory: true
-      heapInitial: 200m
-      heapMax: 1g
       migrate: true
       seed: true
       convertEmptyValues: true
+      heapMax: 1g
+      heapInitial: 200m
+    # seed:
+    #   domain:
+    #     sources:
+    #       - table: notes
+    #         sources: [./resources/migrations/notes_v0.json]
     migration:
       dir: offline/migrations
 

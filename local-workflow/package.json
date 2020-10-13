@@ -4,7 +4,7 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "dev": "SLS_DEBUG=* NODE_ENV=development sls offline start",
+    "dev": "SLS_DEBUG=* NODE_ENV=development sls offline start --env yml",
     "test": "NODE_ENV=development npm run jest",
     "deploy": "NODE_ENV=production sls deploy"
   },
