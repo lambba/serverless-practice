@@ -18,4 +18,4 @@ export const hello = async function hello(event, _context, _callback) {
 
 // Export the hander wrapped in the "run warm" utility which will handle events
 // from the scheduler, keeping our actual handler logic clean.
-export default runWarm(hello);
+// export default runWarm(hello);

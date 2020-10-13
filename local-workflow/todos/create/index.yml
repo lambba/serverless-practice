@@ -1,5 +1,5 @@
 create:
-  handler: todos/create/index.default
+  handler: todos/create/index.create
   events:
     - http:
         path: create

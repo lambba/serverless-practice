@@ -1,5 +1,5 @@
 hello:
-  handler: todos/hello/index.default
+  handler: todos/hello/index.hello
   events:
     - http:
         path: hello
