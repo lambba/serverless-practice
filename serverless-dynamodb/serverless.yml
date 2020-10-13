@@ -10,7 +10,7 @@ provider:
   name: aws
   region: us-east-1
   runtime: nodejs12.x
-  stage: ${opt:stage, 'production'} # Root effetive of env variables
+  stage: ${opt:stage, 'development'} # Root effetive of env variables
   environment:
     ${file(./env/${self:provider.stage}.yml)}
   versionFunctions: false
@@ -35,7 +35,7 @@ provider:
       Resource: "*"
 
 custom:
-  stage: ${opt:stage, self:provider.stage}
+  # stage: ${opt:stage, self:provider.stage}
   tableName: notes # ${self:provider.stage}-notes
   webpack:
     webpackConfig: './webpack.config.js'

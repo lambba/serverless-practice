@@ -6,9 +6,9 @@
   "author": "Ben Gao",
   "main": "handler.js",
   "scripts": {
-    "deploy": "NODE_ENV=production sls deploy",
-    "dev": "SLS_DEBUG=* NODE_ENV=development sls offline start",
-    "test": "NODE_ENV=development npm run jest"
+    "dev": "SLS_DEBUG=* NODE_ENV=development sls offline start --env development",
+    "test": "NODE_ENV=development npm run jest",
+    "deploy": "NODE_ENV=production sls deploy"
   },
   "dependencies": {
     "source-map-support": "^0.5.19"
