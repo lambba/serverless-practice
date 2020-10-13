@@ -1,0 +1,11 @@
+hello:
+  handler: todos/hello/index.hello
+  events:
+    - http:
+        path: hello
+        method: get
+    - schedule:
+        rate: rate(5 minutes)
+        enabled: true
+  environment:
+    HELLO: hello

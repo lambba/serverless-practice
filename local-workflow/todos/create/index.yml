@@ -1,0 +1,8 @@
+create:
+  handler: todos/create/index.create
+  events:
+    - http:
+        path: create
+        method: post
+        integration: lambda
+        cors: true

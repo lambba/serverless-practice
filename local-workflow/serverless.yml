@@ -1,0 +1,74 @@
+service: local-workflow
+frameworkVersion: '2'
+
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs12.x
+  # stage: ${opt:stage, 'production'}
+  stage: development # ${env:STAGE}
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment: #Global variables
+    # ${file(configs/${self:provider.stage}.yml)} TODO: TBC
+  tableName: notes # TODO: move to env file
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - 'Fn::GetAtt': [NotesTable, TodosDynamoDbTable, Arn]
+
+custom:
+  # stage: ${opt:stage, self:provider.stage}
+  tableName: notes # ${self:provider.stage}-notes
+  dotenv:
+    logging: false
+    path: ./configs/.env
+    # basePath: ./
+    # include:
+      # - AUTH0_CLIENT_ID
+      # - AUTH0_CLIENT_SECRET
+    # exclude:
+      # - NODE_ENV
+  webpack:
+    webpackConfig: './webpack.config.js'
+    includeModules: true
+  dynamodb:
+    stages:
+      - development
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+      heapMax: 1g
+      heapInitial: 200m
+    # seed:
+    #   domain:
+    #     sources:
+    #       - table: notes
+    #         sources: [./resources/migrations/notes_v0.json]
+    migration:
+      dir: offline/migrations
+
+functions:
+  hello: ${file(todos/hello/index.yml):hello}
+  create: ${file(todos/create/index.yml):create}
+
+resources:
+  - ${file(resources/api-gateway-errors.yml)}
+  - ${file(resources/dynamodb-table.yml)}
