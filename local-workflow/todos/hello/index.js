@@ -1,7 +1,8 @@
 import runWarm from '../../utils/runWarm';
 
-// Lambda handler. We are using an async function to simplify the code and
-// remove the need to use a callback.
+console.log('HELLO', process.env.HELLO);
+console.log('DYNAMO_TABLE_NOTES', process.env.DYNAMO_TABLE_NOTES);
+
 export const hello = async function hello(event, _context, _callback) {
   const response = {
     statusCode: 200,

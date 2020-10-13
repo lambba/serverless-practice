@@ -7,3 +7,5 @@ hello:
     - schedule:
         rate: rate(5 minutes)
         enabled: true
+  environment:
+    HELLO: hello

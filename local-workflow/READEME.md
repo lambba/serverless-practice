@@ -1,6 +1,6 @@
-# Xcutes services
+# Xcutes Serverless Services
 
-## Reference links
+## Repository references
 
 - [Serverless Architecture Boilerplate](https://github.com/msfidelis/serverless-architecture-boilerplate)
 
