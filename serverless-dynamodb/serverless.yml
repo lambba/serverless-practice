@@ -2,7 +2,6 @@ service: local-workflow
 frameworkVersion: '2'
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
@@ -11,12 +10,12 @@ provider:
   name: aws
   region: us-east-1
   runtime: nodejs12.x
-  # stage: ${opt:stage, 'production'}
-  stage: development # ${env:STAGE}
+  stage: ${opt:stage, 'development'} # Root effetive of env variables
+  environment:
+    ${file(./env/${self:provider.stage}.yml)}
+  versionFunctions: false
   apiGateway:
     minimumCompressionSize: 1024
-  environment: #Global variables
-    # ${file(configs/${self:provider.stage}.yml)} TODO: TBC
   tableName: notes # TODO: move to env file
   iamRoleStatements:
     - Effect: Allow
@@ -28,21 +27,16 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource:
-        - 'Fn::GetAtt': [NotesTable, TodosDynamoDbTable, Arn]
+      Resource: "arn:aws:dynamodb:*:*:*"
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
 
 custom:
   # stage: ${opt:stage, self:provider.stage}
   tableName: notes # ${self:provider.stage}-notes
-  dotenv:
-    logging: false
-    path: ./configs/.env
-    # basePath: ./
-    # include:
-      # - AUTH0_CLIENT_ID
-      # - AUTH0_CLIENT_SECRET
-    # exclude:
-      # - NODE_ENV
   webpack:
     webpackConfig: './webpack.config.js'
     includeModules: true
@@ -51,12 +45,13 @@ custom:
       - development
     start:
       port: 8000
-      inMemory: true
+      inMemory: false
       migrate: true
-      seed: true
-      convertEmptyValues: true
-      heapMax: 1g
-      heapInitial: 200m
+      # seed: true
+      # convertEmptyValues: true
+      # heapMax: 1g
+      # heapInitial: 200m
+      # noStart: true
     # seed:
     #   domain:
     #     sources:

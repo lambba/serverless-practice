@@ -1,0 +1,4 @@
+# Includes common variables customized effective on env
+
+ENV: development
+DYNAMO_TABLE_NOTES: ${self:custom.tableName}
