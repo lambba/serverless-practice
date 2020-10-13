@@ -1,15 +1,15 @@
 service: local-workflow
-
 frameworkVersion: '2'
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-webpack
   - serverless-dynamodb-local
   - serverless-offline
+  - serverless-dotenv-plugin
 
 provider:
   name: aws
+  region: us-east-1
   runtime: nodejs12.x
   # stage: ${opt:stage, 'production'}
   stage: development # ${env:STAGE}
@@ -33,7 +33,7 @@ provider:
 
 custom:
   # stage: ${opt:stage, self:provider.stage}
-  tableName: ${self:provider.stage}-notes
+  tableName: notes # ${self:provider.stage}-notes
   dotenv:
     logging: false
     path: ./configs/.env
@@ -48,29 +48,22 @@ custom:
     includeModules: true
   dynamodb:
     stages:
-      - dev
+      - development
     start:
       port: 8000
       inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
       migrate: true
+      seed: true
+      convertEmptyValues: true
     migration:
       dir: offline/migrations
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          method: get
-          path: hello
-  create:
-    handler: todos/create.create
-    events:
-      - http:
-          path: notes
-          method: post
-          integration: lambda
-          cors: true
+  hello: ${file(todos/hello/index.yml):hello}
+  create: ${file(todos/create/index.yml):create}
+
 resources:
   - ${file(resources/api-gateway-errors.yml)}
   - ${file(resources/dynamodb-table.yml)}

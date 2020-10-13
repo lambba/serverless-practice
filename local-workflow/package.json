@@ -4,7 +4,7 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "dev": "NODE_ENV=development sls offline start --env development",
+    "dev": "SLS_DEBUG=* sls offline start --env development",
     "test": "NODE_ENV=development npm run jest",
     "deploy": "NODE_ENV=production sls deploy"
   },
@@ -30,7 +30,7 @@
     "prettier-eslint": "^11.0.0",
     "prettier-plugin-package": "^1.1.0",
     "serverless-dotenv-plugin": "^3.0.0",
-    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-dynamodb-local": "0.2.30",
     "serverless-offline": "^6.8.0",
     "serverless-webpack": "^5.3.5",
     "webpack": "^4.44.2",
