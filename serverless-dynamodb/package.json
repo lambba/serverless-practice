@@ -2,7 +2,7 @@
   "name": "xcutes-services",
   "version": "1.0.0",
   "description": "",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "author": "Ben Gao",
   "main": "handler.js",
   "scripts": {
