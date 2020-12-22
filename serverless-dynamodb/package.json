@@ -2,13 +2,13 @@
   "name": "xcutes-services",
   "version": "1.0.0",
   "description": "",
-  "license": "MIT",
-  "author": "Ben Gao",
+  "license": "UNLICENSED",
+  "author": "Xingbin (Ben) Gao",
   "main": "handler.js",
   "scripts": {
+    "deploy": "NODE_ENV=production sls deploy",
     "dev": "SLS_DEBUG=* NODE_ENV=development sls offline start --env development",
-    "test": "NODE_ENV=development npm run jest",
-    "deploy": "NODE_ENV=production sls deploy"
+    "test": "NODE_ENV=development npm run jest"
   },
   "dependencies": {
     "source-map-support": "^0.5.19"
